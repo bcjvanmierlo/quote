@@ -1,0 +1,105 @@
+openapi: 3.0.2
+info:
+  title: Quote service
+  version: 0.1.0
+  description: Service providing random quotes in different formats
+servers:
+- url: http://localhost:8080/
+  description: Localhost
+paths:
+  /quotes/random:
+    get:
+      tags:
+      - quote
+      summary: Random quote in text format
+      responses:
+        "200":
+          description: A single quote.
+          content:
+            text/plain:
+              schema:
+                type: string
+      operationId: getRandomQuote
+  /quotes/randomjson:
+    get:
+      tags:
+      - quote
+      summary: Random quote in JSON format
+      responses:
+        "200":
+          description: A single quote object with author and id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quoteDto'
+      operationId: getRandomQuoteJson
+  /quotes/randomxml:
+    get:
+      tags:
+      - quote
+      summary: Random quote in XML format
+      responses:
+        "200":
+          description: A single quote object with author and id.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/quoteDto'
+      operationId: getRandomQuoteXml
+  /quotes/likebyid:
+    get:
+      tags:
+      - quote
+      summary: Like a quote by id
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer 
+          required: true
+          description: The id of the quote
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Quote not found
+      operationId: likeQuoteById
+  /quotes/likebyquote:
+    get:
+      tags:
+      - quote
+      summary: Like a quote by its quote text
+      parameters:
+        - in: query
+          name: quote
+          schema:
+            type: string 
+          required: true
+          description: The quote text of the quote
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Quote not found
+      operationId: likeQuoteByQuote
+components:
+  schemas:
+    quoteDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        quote:
+          type: string
+        author:
+          type: string
+      xml:
+        name: 'xml-quote'
+      example:
+        id: 2
+        quote: Walking on water and developing software from a specification are easy if both are frozen.
+        author: Edward V Berard
+tags:
+- name: quote
+  description: 'Quote service'
+          
